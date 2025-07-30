@@ -1,4 +1,4 @@
-# train.py (updated for reduced dataset size)
+# train.py (updated for further reduced dataset size)
 
 import os
 from transformers import AutoTokenizer
@@ -10,9 +10,9 @@ def main():
     save_path = "/root/emotion_model"
     emotions = ["anger", "sadness", "joy", "disgust", "fear", "surprise", "neutral"]
     
-    # Training parameters - Reduced dataset for faster training
+    # Training parameters - Further reduced for <2-hour total training
     config = {
-        "num_train": 5000,  # Reduced from 0 (full) to 5000 for ~1-1.5 hour training on GPU
+        "num_train": 2000,  # Reduced to 2000 (before oversampling) for ~10-20 min/epoch on GPU
         "num_epochs": 6,
         "batch_size": 8,
         "learning_rate": 5e-6
