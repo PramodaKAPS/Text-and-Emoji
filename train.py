@@ -1,4 +1,4 @@
-# train.py
+# train.py (updated for reduced dataset size)
 
 import os
 from transformers import AutoTokenizer
@@ -10,8 +10,9 @@ def main():
     save_path = "/root/emotion_model"
     emotions = ["anger", "sadness", "joy", "disgust", "fear", "surprise", "neutral"]
     
+    # Training parameters - Reduced dataset for faster training
     config = {
-        "num_train": 0,  # Full dataset
+        "num_train": 5000,  # Reduced from 0 (full) to 5000 for ~1-1.5 hour training on GPU
         "num_epochs": 6,
         "batch_size": 8,
         "learning_rate": 5e-6
@@ -23,7 +24,7 @@ def main():
     print(f"   - Cache directory: {cache_dir}")
     print(f"   - Save path: {save_path}")
     print(f"   - Selected emotions: {emotions}")
-    print(f"   - Training samples: Full dataset")
+    print(f"   - Training samples: {config['num_train']} (before oversampling)")
     print(f"   - Epochs: {config['num_epochs']}")
     print(f"   - Batch size: {config['batch_size']}")
     print(f"   - Learning rate: {config['learning_rate']}")
@@ -58,3 +59,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
