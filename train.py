@@ -1,19 +1,20 @@
-# train.py (updated for further reduced dataset size)
+# train.py (updated for further reduced dataset size and epochs)
 
 import os
 from transformers import AutoTokenizer
 from data_utils import load_and_filter_goemotions, oversample_training_data, prepare_tokenized_datasets
 from model_utils import create_tf_datasets, setup_model_and_optimizer, compile_and_train, save_model_and_tokenizer, evaluate_model
+import tensorflow as tf  # For early stopping callback
 
 def main():
     cache_dir = "/root/huggingface_cache"
     save_path = "/root/emotion_model"
     emotions = ["anger", "sadness", "joy", "disgust", "fear", "surprise", "neutral"]
     
-    # Training parameters - Further reduced for <2-hour total training
+    # Training parameters - Reduced to 500 samples and 2 epochs for very fast training
     config = {
-        "num_train": 2000,  # Reduced to 2000 (before oversampling) for ~10-20 min/epoch on GPU
-        "num_epochs": 6,
+        "num_train": 500,  # Reduced to 500 (before oversampling)
+        "num_epochs": 2,   # Reduced to 2 epochs
         "batch_size": 8,
         "learning_rate": 5e-6
     }
@@ -43,7 +44,10 @@ def main():
         
         model, optimizer = setup_model_and_optimizer("allenai/longformer-base-4096", len(emotions), tf_train, config["num_epochs"], config["learning_rate"], cache_dir)
         
-        model = compile_and_train(model, optimizer, tf_train, tf_val, config["num_epochs"])
+        # Add early stopping (optional, but helps if validation plateaus early)
+        early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=1, restore_best_weights=True)
+        
+        model = compile_and_train(model, optimizer, tf_train, tf_val, config["num_epochs"], callbacks=[early_stopping])  # Pass callbacks
         
         save_model_and_tokenizer(model, tokenizer, save_path)
         
