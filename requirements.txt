@@ -1,3 +1,4 @@
+# requirements.txt
 datasets==2.18.0
 huggingface-hub==0.21.4
 transformers==4.40.2
@@ -13,5 +14,3 @@ matplotlib
 emoji==2.2.0
 gensim==4.3.2
 nltk==3.8.1
-scipy==1.11.4
-
