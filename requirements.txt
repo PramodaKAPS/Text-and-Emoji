@@ -13,4 +13,5 @@ matplotlib
 emoji==2.2.0
 gensim==4.3.2
 nltk==3.8.1
-scipy==1.10.1  # Pinned to a version compatible with Gensim 4.3.2
+scipy==1.11.4
+
